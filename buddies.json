@@ -1,0 +1,29 @@
+[
+
+	{
+		"userName": "Alex12",
+		"firstName": "alex",
+		"lastName": "wue",
+		"status": "available",
+		"email": "alex@gmail.com",
+		"dob": "2/21/1979",
+		"bio": "Software Engineer"
+	}, {
+		"userName": "johnny",
+		"firstName": "john",
+		"lastName": "Rick",
+		"status": "busy",
+		"email": "john@gmail.com",
+		"dob": "10/20/1980",
+		"bio": "Product Manager"
+	}, {
+		"userName": "mleon",
+		"firstName": "mariam",
+		"lastName": "leon",
+		"status": "offline",
+		"email": "lmariam@gmail.com",
+		"dob": "12/5/1995",
+		"bio": "Student"
+	}
+
+]

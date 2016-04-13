@@ -1,0 +1,47 @@
+<div class="container">
+	<div class="row">
+	<div class="col-md-4 col-md-offset-3 well well-sm">
+	<form class="form-horizontal" action="#" method="post" name="myForm">
+
+		<!--username-->
+
+	    User Name: <input class="form-control" type='text' name="userName" ng-model='userName' placeholder="username" required ng-pattern="/^[a-zA-Z0-9]*$/">
+	    <span ng-show="myForm.userName.$error.required">UsernameRequired!</span>
+	    <span ng-show="myForm.userName.$error.pattern">Please use numbers letters only</span><br/>
+
+	    <!--firstname-->
+
+	    First Name: <input class="form-control" type='text' name="firstName" ng-model='firstName' placeholder="firstname" required ng-pattern="/^(\D)+$/">
+	    <span ng-show="myForm.firstName.$error.required">First name Required!</span>
+        <span class="alert" ng-show="myForm.firstName.$error.pattern">Enter valid name</span><br/>
+
+        <!--lastname-->
+
+        Last Name: <input class="form-control" type='text' name="lastName" ng-model='lastName' placeholder="lastname" required ng-pattern="/^(\D)+$/" />
+        <span ng-show="myForm.lastName.$error.required">Last name Required!</span>
+        <span class="alert" ng-show="myForm.lastName.$error.pattern">Enter valid name</span><br/>
+
+        <!--Email-->
+
+	    Email: <input class="form-control" type='email' name="email" ng-model='email' placeholder="email" required ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" />
+	    <span ng-show="myForm.email.$error.required">Email Required!</span>
+        <span class="alert" ng-show="myForm.email.$error.pattern">Enter valid mail id</span><br/>
+
+        <!--DOB-->
+
+	    DOB: <input class="form-control" type='date' name="dob" ng-model='dob' placeholder="DOB(YYYY/MM/DD)" required  />
+	    <span ng-show="myForm.dob.$error.required">Date Required!</span>
+        <span class="alert" ng-show="myForm.dob.$error.date">Date should be in format YYYY-MM-DD</span><br/>
+
+        <!--Bio-->
+
+	    BIO: <input class="form-control" type='text' name="bio" ng-model='bio' placeholder="bio" required ng-pattern="/^[a-zA-Z0-9]*$/" />
+	    <span ng-show="myForm.bio.$error.required">Bio Required!</span>
+        <span class="alert" ng-show="myForm.bio.$error.pattern">Please use numbers letters only</span><br/>
+
+	    <button class="btn btn-primary"  ng-click="add()" ng-disabled="myForm.$invalid">Submit</button>
+	    
+	</form>
+</div>
+</div>
+</div>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Buddy</title>
+		<meta charset="utf-8">
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+		
+		<script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.4.js"></script>
+	</head>
+	<body ng-app='buddyApp'>
+		<div class="container">
+			<div class="page-header">
+				<h1>Buddy List</h1>
+			</div>
+		    <div class= "row">
+                <div class="col col-lg-10">
+                    <p class="input-group">
+                        <input type="text" class="form-control input-lg" placeholder="Search" ng-model="search"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                    </p><br/>
+    	        <div ng-controller="newBuddyCtrl">
+	                <table class="table table-bordered table-hover text-center">
+     	                <thead >
+     	                    <tr >
+     							<th class="text-center">S.No</th>
+                                <th class="text-center">Username</th>
+     		                    <th class="text-center">First Name</th>
+                                <th class="text-center">Last name</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+     	                    <tr ng-repeat="buddy in buddies|filter:search" min>
+     		                    <td>{{$index+1}}</td>
+                                <td class='col-sm-2'><span ng-click="bio(buddy)">{{buddy.userName}}</span></td>
+     		                    <td class='col-sm-2'><span ng-click="bio(buddy)">{{buddy.firstName | capitalize}}</span></td>
+                                <td class='col-sm-2'><span ng-click="bio(buddy)">{{buddy.lastName | capitalize}}</span></td>
+                                <td class='col-sm-2'><span ng-click="bio(buddy)">{{buddy.status | capitalize}}
+                                	</span>
+                                    <span ng-if="buddy.status=='offline'"></span>
+			                        <span class="glyphicon glyphicon-collapse-down dropdown" ng-click="offline()"></span>
+			                    </td>    
+                                <td>
+                                    <button class="btn" ng-click="deleteBuddy(buddy.userName)">
+                                    <span class="glyphicon glyphicon-trash"></span>Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        <button ng-click="addBuddy()">Add Buddy</button>
+        </div>     
+        </div>
+    </div>
+<script type="text/javascript">
+
+var buddyApp = angular.module("buddyApp",['ui.bootstrap']);
+			
+buddyApp.filter('capitalize', function() {
+      return function(input, scope) {
+      if (input!=null)
+      input = input.toLowerCase();
+      return input.substring(0,1).toUpperCase()+input.substring(1);
+       }
+     });
+
+//getting data from server//
+buddyApp.controller('newBuddyCtrl', function($scope, $uibModal, $log,$http){
+	$http.get('buddies.json').success(function(data){
+		$scope.buddies = data;
+    });
+    
+    
+    //last login time and date//
+	$scope.reverse = true;
+	$scope.offline=function(){
+		var d = new Date();
+		alert (d.toLocaleTimeString());
+	}
+    
+    //extra data is retriving from the json ,onclick on the person name//			
+	$scope.bio=function(buddy){
+		$scope.bi = { email: buddy.email , dob: buddy.dob , bio: buddy.bio};
+		$scope.additionalDetails('lg');					
+	};
+
+	//deleting buddy
+    $scope.deleteBuddy = function(userName){
+        var i;
+        if(confirm("Are you sure want to delete")== true) {
+            for (i in $scope.buddies) {
+                if ($scope.buddies[i].userName == userName) {
+                    $scope.buddies.splice(i, 1);
+                }
+            }
+        }
+    };
+                
+    // adding a buddy
+	    $scope.addBuddy = function () {
+			var createBuddy = $uibModal.open({
+     			templateUrl : 'addingBuddy.html',
+				controller : 'newBuddyCtrl1', 
+				size : 'lg'
+			});
+
+			createBuddy.result.then(function(data) {
+				$scope.buddies.push(data);
+				}, function(xhr) {
+
+				})
+			}
+                 
+			$scope.add=function(){
+				
+				$scope.buddies.push({
+				  userName : $scope.userName,
+				  firstName: $scope.firstName,
+				  lastName : $scope.lastName,
+				  status : 'Online',
+				  email : $scope.email,
+				  dob : $scope.dob,
+				  bio : $scope.bio
+				});
+			}
+
+    //information regarding the above line//
+		$scope.additionalDetails = function(size){
+			var buddyInstance = $uibModal.open({
+				templateUrl: 'buddydetails.html',
+				controller: 'buddyInstanceCtrl',
+				size: size,
+				resolve:{
+					bi: function(){
+					return $scope.bi;
+					}
+				}
+			});
+			buddyInstance.result.then(function(){
+						
+			}, function () {
+			   $log.info('Modal dismissed at: ' + new Date());
+			});
+			};
+			});
+                
+			buddyApp.controller('buddyInstanceCtrl',function($scope,$uibModalInstance,bi){
+				$scope.bud = bi;
+				
+			});
+			buddyApp.controller('newBuddyCtrl1', function($scope,$uibModalInstance, $log,$http){
+				$scope.add =function() {
+					$uibModalInstance.close({
+						userName : $scope.userName,
+						firstName: $scope.firstName,
+						lastName : $scope.lastName,
+						status : 'Online',
+						email : $scope.email,
+						dob : $scope.dob,
+						bio : $scope.bio
+					});
+				}
+			});			
+</script>
+</body>
+</html>
